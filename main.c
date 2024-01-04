@@ -24,7 +24,9 @@ int main(int argc, char* argv[])
 
 		winner = checkwinner(table);
 
-		enginethink(engine);
+		enginethink(engine, table);
+
+
 		// if (winner) {
 		// 	printtable(table);
 		// 	printf("WINNER!!!\n");
