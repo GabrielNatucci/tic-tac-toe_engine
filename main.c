@@ -3,7 +3,6 @@
 #include "core/tictactoe/checkwinner.h"
 #include "core/tictactoe/processinput.h"
 #include <stdbool.h>
-#include <stdio.h>
 
 int main(int argc, char* argv[])
 {
@@ -22,10 +21,7 @@ int main(int argc, char* argv[])
 			valid = processinput(table);
 		} while (valid);
 
-		winner = checkwinner(table);
-
 		enginethink(engine, table);
-
 
 		// if (winner) {
 		// 	printtable(table);
