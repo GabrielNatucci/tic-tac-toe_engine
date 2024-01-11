@@ -1,13 +1,21 @@
 #include "engine.h"
-#include "sorting/sorting.h"
+#include "../output/printtable.h"
 #include <stdio.h>
 
-int enginethink(char c_input[3], int table[3][3])
+int engine(char* c_input, int table[3][3])
 {
-	int local_table[3][3];
-	int l_table[3][3];
-	char possibleMoves[9][3];
 	bool turn = true; // when true = engine's turn
+
+	enginethink(c_input, table, turn);
+	printf("%s\n", c_input);
+
+	return 0;
+}
+
+int enginethink(char* c_input, int table[3][3], bool turn)
+{
+	int eval[9] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	char possibleMoves[9][3];
 
 	int index = 0;
 	for (int i = 0; i < 3; i++) {
@@ -27,30 +35,19 @@ int enginethink(char c_input[3], int table[3][3])
 		possibleMoves[i][2] = '\0';
 	}
 
-	// avalia a posicao
-	int eval[9] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-	for (int i = 0; i < 9; i++) {
-		if (possibleMoves[i][0] != '\0') {
-			eval[i] = evaluate(table, possibleMoves[i], turn);
-			printf("%d\n", eval[i]);
+	int best_eval = 1;
+	// check winning continuation
+	for (int i = 0; i < index; i++) {
+		eval[i] = evaluate(table, turn, possibleMoves[i]);
+		if (eval[i] < best_eval) {
+			best_eval = eval[i];
 		}
 	}
-	printf("\n");
 
-	bubblesort(eval, 9);
-
-	// for (int i = 0; i < 9; i++) {
-	// 	printf("%d\n", eval[i]);
-	// }
-
-	c_input[0] = 'a';
-	c_input[1] = 'b';
-
-	return 0;
+	return best_eval;
 }
 
-int evaluate(int table[3][3], char move[3], bool turn)
+int evaluate(int (*table)[3], bool turn, char* move)
 {
 	int local_table[3][3];
 	for (int i = 0; i < 3; i++) {
@@ -59,29 +56,41 @@ int evaluate(int table[3][3], char move[3], bool turn)
 		}
 	}
 
-	int row = move[0] - 48;
-	int file = move[1] - 48;
-	local_table[row][file] = 0;
+	local_table[move[0] - 48][move[1] - 48] = 1;
 
-	// in case printing the local table is necessary
-	// for (int i = 0; i < 3; i++) {
-	// 	for (int j = 0; j < 3; j++) {
-	// 		printf("%d", local_table[i][j]);
-	// 	}
-	// 	printf("\n");
-	// }
+	// // in case printing the local table is necessary
+	printtable(local_table);
 
-	char p[2];
-	if (turn == true) {
-		p[0] = 'x';
-	} else {
-		p[0] = 'o';
-	}
-	p[1] = '\0';
+	char oponentPossibleMoves[9][3];
 
-	if (checkwinner(local_table, p)) {
-		return 1;
+	int index = 0;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (local_table[i][j] == -1) {
+				oponentPossibleMoves[index][0] = i + 48;
+				oponentPossibleMoves[index][1] = j + 48;
+				oponentPossibleMoves[index][2] = '\0';
+				index++;
+			}
+		}
 	}
 
+	for (int i = index; i < 9; i++) {
+		oponentPossibleMoves[i][0] = '\0';
+		oponentPossibleMoves[i][1] = '\0';
+		oponentPossibleMoves[i][2] = '\0';
+	}
+
+	char c_move[3]; // current_move
+	c_move[2] = '\0';
+	for (int i = 0; i < index; i++) {
+		c_move[0] = oponentPossibleMoves[i][0];
+		c_move[1] = oponentPossibleMoves[i][1];
+		local_table[c_move[0]][c_move[1]];
+	}
+
+	// printf("Eval: %d\n\n", eval);
+
+	// return eval;
 	return 0;
 }
