@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	int table[3][3] = { -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 
 	// bool game = true;
-	bool winner;
+	int winner;
 
 	char* engine_c = malloc(3 * sizeof(char));
 	int i = 0;
@@ -34,6 +34,7 @@ int main(int argc, char* argv[])
 		} while (valid);
 
 		winner = checkwinner(table);
+
 		if (winner != 0) {
 			printwinner(table, winner);
 			break;
@@ -43,6 +44,8 @@ int main(int argc, char* argv[])
 		int row = engine_c[0] - 48;
 		int file = engine_c[1] - 48;
 		table[row][file] = 1;
+		
+		winner = checkwinner(table);
 
 		if (winner != 0) {
 			printwinner(table, winner);
