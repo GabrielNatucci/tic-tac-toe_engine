@@ -10,14 +10,24 @@ void printwinner(int table[3][3], int who)
 {
 	printtable(table);
 
-	if (who == 1)
+	if (who == 2) {
+		printf("Draw!!\n");
+	} else if (who == 1) {
 		printf("Player wins!!\n");
-	else
+	} else {
 		printf("Computer wins!!\n");
+	}
 }
 
 int main(int argc, char* argv[])
 {
+	FILE* f;
+	f = fopen("pensamentos_da_minha_cabeca.log", "w");
+
+	if (f == NULL) {
+		return -1;
+	}
+
 	int table[3][3] = { -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 
 	// bool game = true;
@@ -40,11 +50,11 @@ int main(int argc, char* argv[])
 			break;
 		}
 
-		engine(engine_c, table);
+		engine(engine_c, table, f);
 		int row = engine_c[0] - 48;
 		int file = engine_c[1] - 48;
 		table[row][file] = 1;
-		
+
 		winner = checkwinner(table);
 
 		if (winner != 0) {

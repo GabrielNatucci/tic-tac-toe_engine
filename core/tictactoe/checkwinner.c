@@ -21,22 +21,26 @@ int checkwinner(int table[3][3])
 		return diagonal;
 	}
 
-	return 0;
+	int draw = 2;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (table[i][j] == -1) {
+				draw = 0;
+			}
+		}
+	}
+
+	return draw;
 }
 
 int checkrow(int table[3][3])
 {
-	// printf("row:\n");
-
-	for (int i = 0; i < 2; i++) {
-		bool x_winner = (table[i][0] == 0 && table[i][1] == 0 && table[i][2] == 0);
-		bool o_winner = (table[i][0] == 1 && table[i][1] == 1 && table[i][2] == 1);
-		// printf("\nx: %d\t", x_winner);
-		// printf("o: %d\n", x_winner);
-
-		if (x_winner) {
+	for (int i = 0; i < 3; i++) {
+		if ((table[i][0] == 0 && table[i][1] == 0 && table[i][2] == 0)) {
 			return 1;
-		} else if (o_winner) {
+		}
+
+		if ((table[i][0] == 1 && table[i][1] == 1 && table[i][2] == 1)) {
 			return -1;
 		}
 	}
@@ -46,20 +50,12 @@ int checkrow(int table[3][3])
 
 int checkcolumn(int table[3][3])
 {
-	bool x_winner;
-	bool o_winner;
-
-	// printf("file:\n");
-
-	for (int j = 0; j < 2; j++) {
-		bool x_winner = (table[0][j] == 0 && table[1][j] == 0 && table[2][j] == 0);
-		bool o_winner = (table[0][j] == 1 && table[1][j] == 1 && table[2][j] == 1);
-		// printf("\nx: %d\t", x_winner);
-		// printf("o: %d\n", x_winner);
-
-		if (x_winner) {
+	for (int j = 0; j < 3; j++) {
+		if ((table[0][j] == 0 && table[1][j] == 0 && table[2][j] == 0)) {
 			return 1;
-		} else if (o_winner) {
+		}
+
+		if ((table[0][j] == 1 && table[1][j] == 1 && table[2][j] == 1)) {
 			return -1;
 		}
 	}
@@ -72,10 +68,6 @@ int checkdiagonal(int table[3][3])
 	bool x_winner = (table[0][0] == 0 && table[1][1] == 0 && table[2][2] == 0);
 	bool o_winner = (table[0][0] == 1 && table[1][1] == 1 && table[2][2] == 1);
 
-	// printf("diagonal:\n");
-	// printf("\nx: %d\t", x_winner);
-	// printf("o: %d\n", x_winner);
-
 	if (x_winner) {
 		return 1;
 	} else if (o_winner) {
@@ -84,8 +76,6 @@ int checkdiagonal(int table[3][3])
 
 	x_winner = (table[2][0] == 0 && table[1][1] == 0 && table[0][2] == 0);
 	o_winner = (table[2][0] == 1 && table[1][1] == 1 && table[0][2] == 1);
-	// printf("\nx: %d\t", x_winner);
-	// printf("o: %d\n", x_winner);
 
 	if (x_winner) {
 		return 1;
