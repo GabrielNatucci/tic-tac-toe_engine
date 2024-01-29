@@ -4,17 +4,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-int engine(char* c_input, int table[3][3], FILE* f)
+int engine(char* c_input, int table[3][3], bool turn, FILE* f)
 {
-	bool turn = true; // when true = engine's turn
 
-	enginethink(c_input, table, turn, f);
-
-	return 0;
-}
-
-int enginethink(char* c_input, int table[3][3], bool turn, FILE* f)
-{
 	char possibleMoves[9][3];
 
 	int index = 0;
@@ -38,12 +30,26 @@ int enginethink(char* c_input, int table[3][3], bool turn, FILE* f)
 	}
 
 	int iBest = 0;
-	int bestEval = 99999999;
+	int bestEval;
 
-	for (int i = 0; i < index; i++) {
-		if (eval[i] < bestEval) {
-			bestEval = eval[i];
-			iBest = i;
+	if (turn == true)
+		bestEval = 99999999;
+	else
+		bestEval = -99999999;
+
+	if (turn == true) {
+		for (int i = 0; i < index; i++) {
+			if (eval[i] < bestEval) {
+				bestEval = eval[i];
+				iBest = i;
+			}
+		}
+	} else {
+		for (int i = 0; i < index; i++) {
+			if (eval[i] > bestEval) {
+				bestEval = eval[i];
+				iBest = i;
+			}
 		}
 	}
 
@@ -62,7 +68,6 @@ int enginethink(char* c_input, int table[3][3], bool turn, FILE* f)
 
 int evaluate(int (*table)[3], bool turn, char* move, FILE* f)
 {
-
 	int local_table[3][3];
 
 	for (int i = 0; i < 3; i++) {
@@ -79,11 +84,11 @@ int evaluate(int (*table)[3], bool turn, char* move, FILE* f)
 	// logs the current table
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			if (table[i][j] == -1) {
+			if (local_table[i][j] == -1) {
 				fprintf(f, ". ");
-			} else if (table[i][j] == 0) {
+			} else if (local_table[i][j] == 0) {
 				fprintf(f, "x ");
-			} else if (table[i][j] == 1) {
+			} else if (local_table[i][j] == 1) {
 				fprintf(f, "o ");
 			}
 		}

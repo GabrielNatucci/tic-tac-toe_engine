@@ -1,7 +1,8 @@
 #include "processinput.h"
+#include <stdbool.h>
 #include <stdio.h>
 
-int processinput(int table[3][3])
+int processinput(int table[3][3], bool its_player_turn)
 {
 	char move[3];
 	move[2] = '\0';
@@ -16,7 +17,10 @@ int processinput(int table[3][3])
 			input(move, &row, &file);
 		}
 
-		table[row][file] = 0;
+		if (its_player_turn == true)
+			table[row][file] = 0; // move from the engine it self
+		else
+			table[row][file] = 1; // move from the engine it self
 
 		return 0;
 	} else {
