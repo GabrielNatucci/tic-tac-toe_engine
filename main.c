@@ -6,16 +6,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void printwinner(int table[3][3], int who)
+void printwinner(int table[3][3], int who, bool who_starts)
 {
 	printtable(table);
 
 	if (who == 2) {
 		printf("Draw!!\n");
-	} else if (who == 1) {
-		printf("Player wins!!\n");
+	} else if (who_starts == true) {
+		if (who == 1) {
+			printf("Player wins!!\n");
+		} else {
+			printf("Computer wins!!\n");
+		}
 	} else {
-		printf("Computer wins!!\n");
+		if (who == 0) {
+			printf("Player wins!!\n");
+		} else {
+			printf("Computer wins!!\n");
+		}
 	}
 }
 
@@ -40,14 +48,20 @@ int main(int argc, char* argv[])
 
 	printf("WELCOME TO TIC TAC TOE VS ENGINE\n");
 	printf("{0} if you want to start first\n");
-	printf("{1} if you want the engien to start first\n:");
+	printf("{1} if you want the engine to start first\n:");
 
 	int* temp = malloc(sizeof(int));
 	do {
 		scanf("%i", temp);
 	} while (!(*temp == 0 || *temp == 1));
 
-	bool does_player_starts_first = true;
+	bool does_player_starts_first;
+
+	if (*temp == 0)
+		does_player_starts_first = true;
+	else
+		does_player_starts_first = false;
+
 	bool turn = true;
 	// main game loop
 	while (true) {
@@ -73,7 +87,7 @@ int main(int argc, char* argv[])
 		int winner = checkwinner(table);
 
 		if (winner != 0) {
-			printwinner(table, winner);
+			printwinner(table, winner, does_player_starts_first);
 			break;
 		}
 
@@ -83,7 +97,8 @@ int main(int argc, char* argv[])
 			turn = true;
 	}
 
-	// free(engine_c);
+	free(engine_c);
+	free(temp);
 
 	return 0;
 }
